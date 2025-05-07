@@ -1,0 +1,64 @@
+name: Build Buildroot with custom defconfig
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      BUILDROOT_VERSION: 2024.02.1
+      DEFCONFIG_PATH: configs/rpi4_aarch64_systemd_defconfig
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential bison flex gettext libncurses5-dev \
+            unzip wget cpio rsync file bc python3
+
+      - name: Download Buildroot
+        run: |
+          wget https://buildroot.org/downloads/buildroot-${BUILDROOT_VERSION}.tar.gz
+          tar -xzf buildroot-${BUILDROOT_VERSION}.tar.gz
+          mv buildroot-${BUILDROOT_VERSION} buildroot
+
+      - name: Copy custom defconfig
+        run: |
+          cp $DEFCONFIG_PATH buildroot/configs/
+
+      - name: Run defconfig
+        working-directory: buildroot
+        run: make $(basename ${{ env.DEFCONFIG_PATH }})
+
+      - name: Build Buildroot
+        working-directory: buildroot
+        run: make -j$(nproc)
+
+      - name: Archive sysroot
+        run: |
+          tar -czf sysroot.tar.gz -C buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot .
+
+      - name: Upload sysroot
+        uses: actions/upload-artifact@v4
+        with:
+          name: sysroot
+          path: sysroot.tar.gz
+
+      - name: Upload rootfs.ext4
+        uses: actions/upload-artifact@v4
+        with:
+          name: rootfs
+          path: buildroot/output/images/rootfs.ext4
+
+      - name: Upload sdcard.img
+        uses: actions/upload-artifact@v4
+        with:
+          name: sdcard-image
+          path: buildroot/output/images/sdcard.img
