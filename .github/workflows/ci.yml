@@ -23,6 +23,15 @@ jobs:
             build-essential bison flex gettext libncurses5-dev \
             unzip wget cpio rsync file bc python3
 
+      - name: Install latest Clang
+        run: |
+          sudo apt-get install -y lsb-release wget software-properties-common
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 18
+          sudo ln -sf /usr/bin/clang-18 /usr/bin/clang
+          sudo ln -sf /usr/bin/clang++-18 /usr/bin/clang++
+
       - name: Download Buildroot
         run: |
           wget https://buildroot.org/downloads/buildroot-${BUILDROOT_VERSION}.tar.gz
