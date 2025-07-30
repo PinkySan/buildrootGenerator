@@ -13,3 +13,4 @@ Um dies zu erreichen, müssen die folgenden Schritte durchgeführt werden:
 6. Das sysroot muss während des erstellen des rootfs erstellt werden.
 7. Die defconfig-Datei soll in einem Verzeichnis `configs` liegen.
 8. ssh muss mit gebaut werden
+9. Clang muss mindestens Version 20 sein
