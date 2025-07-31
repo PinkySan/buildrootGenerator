@@ -53,8 +53,9 @@ jobs:
       - name: Archive sysroot
         run: |
           ls buildroot/output/
+          echo "host"
           ls buildroot/output/host/
-          tar -czf sysroot.tar.gz -C buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot .
+          tar -czf sysroot.tar.gz -C buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot .
 
       - name: Upload sysroot
         uses: actions/upload-artifact@v4
