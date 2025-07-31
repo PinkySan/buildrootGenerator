@@ -52,6 +52,8 @@ jobs:
 
       - name: Archive sysroot
         run: |
+          ls buildroot/output/
+          ls buildroot/output/host/
           tar -czf sysroot.tar.gz -C buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot .
 
       - name: Upload sysroot
