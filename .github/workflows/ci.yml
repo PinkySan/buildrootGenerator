@@ -15,11 +15,13 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false # erhöht die Sicherheit, Token wird nach Checkout entfernt
 
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
+          sudo apt-get install -y --no-install-recommends \
             build-essential bison flex gettext libncurses5-dev \
             unzip wget cpio rsync file bc python3
 
@@ -32,7 +34,15 @@ jobs:
           sudo ln -sf /usr/bin/clang-20 /usr/bin/clang
           sudo ln -sf /usr/bin/clang++-20 /usr/bin/clang++
 
+      - name: Cache Buildroot
+        id: cache-buildroot
+        uses: actions/cache@v4
+        with:
+          path: buildroot
+          key: buildroot-${{ env.BUILDROOT_VERSION }}
+
       - name: Download Buildroot
+        if: steps.cache-buildroot.outputs.cache-hit != 'true'
         run: |
           wget https://buildroot.org/downloads/buildroot-${BUILDROOT_VERSION}.tar.gz
           tar -xzf buildroot-${BUILDROOT_VERSION}.tar.gz
@@ -55,13 +65,34 @@ jobs:
           tar -czf sysroot.tar.gz -C buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot .
 
       - name: Upload sysroot
+        if: always() # Artefakt wird auch bei Fehlern hochgeladen
         uses: actions/upload-artifact@v4
         with:
           name: sysroot
           path: sysroot.tar.gz
 
       - name: Upload rootfs.tar
+        if: always() # Artefakt wird auch bei Fehlern hochgeladen
         uses: actions/upload-artifact@v4
         with:
           name: rootfs.tar
           path: buildroot/output/images/rootfs.tar
+
+      - name: Upload Buildroot logs
+        if: always() # Buildroot-Logs werden immer hochgeladen, hilfreich zur Fehlersuche
+        uses: actions/upload-artifact@v4
+        with:
+          name: buildroot-logs
+          path: |
+            buildroot/output/build/build-time.log
+            buildroot/output/build/packages-file-list.txt
+            buildroot/output/build/.config
+            buildroot/output/build/defconfig
+            buildroot/output/build/failed-packages.log
+            buildroot/output/build/packages/*.log
+            buildroot/output/build/packages/*.err
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -rf buildroot buildroot-*.tar.gz sysroot.tar.gz
