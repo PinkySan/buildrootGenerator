@@ -72,6 +72,7 @@ jobs:
 
       - name: Archive sysroot
         run: |
+          ls buildroot/output/host/
           tar -czf sysroot.tar.gz -C buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot .
 
       - name: Upload sysroot
