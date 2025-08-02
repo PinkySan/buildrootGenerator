@@ -5,12 +5,12 @@
     Lädt das LLVM-Installer-EXE für die angegebene Version herunter und installiert sie silent.
     Optional kann ein Installationsverzeichnis angegeben werden.
 .PARAMETER Version
-    Die LLVM-Version, die installiert werden soll (z.B. "20.0.0").
+    Die LLVM-Version, die installiert werden soll (z.B. "20.1.8").
 .PARAMETER InstallDir
     Optional: Zielverzeichnis für die Installation (z.B. "C:\\LLVM-20").
 .EXAMPLE
-    .\install-llvm.ps1 -Version "20.0.0" -InstallDir "C:\\LLVM-20"
-    .\install-llvm.ps1 -Version "20.0.0"
+    .\install-llvm.ps1 -Version "20.1.8" -InstallDir "C:\\LLVM-20"
+    .\install-llvm.ps1 -Version "20.1.8"
 #>
 param(
     [Parameter(Mandatory=$true)]
