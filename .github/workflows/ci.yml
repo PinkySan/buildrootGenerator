@@ -52,7 +52,7 @@ jobs:
 
       - name: Archive sysroot
         run: |
-          tar -czf sysroot.tar.gz -C buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot .
+          tar -czf sysroot.tar.gz -C buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot .
 
       - name: Upload sysroot
         uses: actions/upload-artifact@v4
@@ -60,14 +60,8 @@ jobs:
           name: sysroot
           path: sysroot.tar.gz
 
-      - name: Upload rootfs.ext4
+      - name: Upload rootfs.tar
         uses: actions/upload-artifact@v4
         with:
-          name: rootfs
-          path: buildroot/output/images/rootfs.ext4
-
-      - name: Upload sdcard.img
-        uses: actions/upload-artifact@v4
-        with:
-          name: sdcard-image
-          path: buildroot/output/images/sdcard.img
+          name: rootfs.tar
+          path: buildroot/output/images/rootfs.tar
