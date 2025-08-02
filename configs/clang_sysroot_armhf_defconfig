@@ -18,6 +18,9 @@ BR2_ENABLE_DEBUG=n
 BR2_DEBUG_SYM_LINK=n
 BR2_STRIP_strip=y
 
+# ccache für schnellere Builds
+BR2_CCACHE=y
+
 # Systemkonfiguration
 BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
 BR2_SYSTEM_DEFAULT_PATH="/bin:/sbin:/usr/bin:/usr/sbin"

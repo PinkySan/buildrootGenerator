@@ -23,7 +23,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
             build-essential bison flex gettext libncurses5-dev \
-            unzip wget cpio rsync file bc python3
+            unzip wget cpio rsync file bc python3 ccache
+            
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: buildroot/output/host/usr/bin/.ccache
+          key: ccache-${{ github.run_id }}
 
       - name: Install latest Clang
         run: |
