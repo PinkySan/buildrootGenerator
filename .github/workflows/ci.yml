@@ -64,7 +64,7 @@ jobs:
       - name: Archive sysroot
         run: |
           ls buildroot/output/host/
-          tar -czf sysroot.tar.gz -C buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot .
+          tar -czf sysroot.tar.gz -C buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot .
 
       - name: Upload sysroot
         if: always() # Artefakt wird auch bei Fehlern hochgeladen
