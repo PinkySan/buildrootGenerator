@@ -51,7 +51,7 @@ jobs:
 
       - name: Copy custom defconfig
         run: |
-          cp ${{ env.DEFCONFIG_PATH }} buildroot/
+          cp ${{ env.DEFCONFIG_PATH }} buildroot/configs/
 
       - name: Run defconfig
         working-directory: buildroot
